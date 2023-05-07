@@ -3,12 +3,12 @@ module diary_api
 go 1.20
 
 require (
-	github.com/gin-gonic/gin v1.9.0
-	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/joho/godotenv v1.5.1
-	golang.org/x/crypto v0.8.0
-	gorm.io/driver/postgres v1.5.0
-	gorm.io/gorm v1.25.0
+	github.com/gin-gonic/gin v1.9.0 // Gin is an HTTP web framework written in Go.
+	github.com/golang-jwt/jwt/v4 v4.5.0 // A Go implementation of JSON Web Tokens.
+	github.com/joho/godotenv v1.5.1 // This will help with managing environment variables.
+	golang.org/x/crypto v0.8.0 // This provides supplementary Go cryptography libraries.
+	gorm.io/driver/postgres v1.5.0 // The application(diary_api) will have a database powered by PostgreSQL.
+	gorm.io/gorm v1.25.0 // This is an ORM (Object Relational Mapper) for Golang. In addition to the library, the GORM dialect (driver) for Postgres is installed to enable connections to PostgreSQL databases.
 )
 
 require (
