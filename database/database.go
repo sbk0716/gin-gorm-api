@@ -23,11 +23,11 @@ func Connect() {
 	databaseName := os.Getenv("DB_NAME")
 	port := os.Getenv("DB_PORT")
 
-	// Set Data Source Name.
+	// Sets Data Source Name to dsn.
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Lagos", host, username, password, databaseName, port)
-	// Set dialector.
+	// Sets gorm.Dialector to pgDialector.
 	pgDialector := postgres.Open(dsn)
-	// Set options.
+	// Sets options to pgOpts.
 	pgOpts := &gorm.Config{}
 	// gorm.Open function opens initialize db session based on dialector.
 	Database, err = gorm.Open(pgDialector, pgOpts)
