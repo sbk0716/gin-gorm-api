@@ -24,7 +24,12 @@ type User struct {
 	Entries []Entry
 }
 
+// ============================================================
+// Save function
+// ============================================================
 func (user *User) Save() (*User, error) {
+	// Inserts value, returning the inserted data's primary key in value's id.
+	// FYI: https://gorm.io/docs/create.html#Create-Record
 	err := database.Database.Create(&user).Error
 	if err != nil {
 		return &User{}, err
@@ -32,9 +37,15 @@ func (user *User) Save() (*User, error) {
 	return user, nil
 }
 
+// ============================================================
+// BeforeSave function
+// ============================================================
 func (user *User) BeforeSave(*gorm.DB) error {
-
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	pass := []byte(user.Password)
+	// the cost that will actually be set if a cost below MinCost is passed into GenerateFromPassword
+	cost := bcrypt.DefaultCost
+	// Returns the bcrypt hash of the password at the given cost.
+	passwordHash, err := bcrypt.GenerateFromPassword(pass, cost)
 	if err != nil {
 		return err
 	}
@@ -43,10 +54,16 @@ func (user *User) BeforeSave(*gorm.DB) error {
 	return nil
 }
 
+// ============================================================
+// ValidatePassword function
+// ============================================================
 func (user *User) ValidatePassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
 
+// ============================================================
+// FindUserByUsername function
+// ============================================================
 func FindUserByUsername(username string) (User, error) {
 	var user User
 	err := database.Database.Where("username=?", username).Find(&user).Error
@@ -56,6 +73,9 @@ func FindUserByUsername(username string) (User, error) {
 	return user, nil
 }
 
+// ============================================================
+// FindUserById function
+// ============================================================
 func FindUserById(id uint) (User, error) {
 	var user User
 	err := database.Database.Preload("Entries").Where("ID=?", id).Find(&user).Error

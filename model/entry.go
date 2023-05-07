@@ -17,8 +17,12 @@ type Entry struct {
 	UserID  uint
 }
 
+// ============================================================
+// Save function
+// ============================================================
 func (entry *Entry) Save() (*Entry, error) {
-
+	// Inserts value, returning the inserted data's primary key in value's id.
+	// FYI: https://gorm.io/docs/create.html#Create-Record
 	err := database.Database.Create(&entry).Error
 	if err != nil {
 		return &Entry{}, err
