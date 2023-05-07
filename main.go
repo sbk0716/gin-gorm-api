@@ -27,10 +27,12 @@ func loadEnv() {
 }
 
 func loadDatabase() {
+	// Opens the connection using the GORM PostgreSQL driver.
 	database.Connect()
-	// Runs auto migration for given model(User).
+
+	// Runs auto migration for given models.
+	// FYI: https://gorm.io/docs/migration.html
 	database.Database.AutoMigrate(&model.User{})
-	// Runs auto migration for given model(Entry).
 	database.Database.AutoMigrate(&model.Entry{})
 }
 
