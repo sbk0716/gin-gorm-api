@@ -39,6 +39,7 @@ func (user *User) Save() (*User, error) {
 
 // ============================================================
 // BeforeSave function
+// FYI: https://gorm.io/docs/hooks.html#Object-Life-Cycle
 // ============================================================
 func (user *User) BeforeSave(*gorm.DB) error {
 	pass := []byte(user.Password)
@@ -58,6 +59,9 @@ func (user *User) BeforeSave(*gorm.DB) error {
 // ValidatePassword function
 // ============================================================
 func (user *User) ValidatePassword(password string) error {
+	// A: hash is generated for the provided plaintext password.
+	// B: hash of the user’s password.
+	// The values of A and B are compared. If they do not match, an error is returned.
 	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
 
@@ -66,6 +70,7 @@ func (user *User) ValidatePassword(password string) error {
 // ============================================================
 func FindUserByUsername(username string) (User, error) {
 	var user User
+	// FindUserByUsername takes a username and queries the database to find the corresponding user.
 	err := database.Database.Where("username=?", username).Find(&user).Error
 	if err != nil {
 		return User{}, err

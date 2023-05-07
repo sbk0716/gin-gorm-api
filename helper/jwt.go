@@ -16,12 +16,17 @@ import (
 var privateKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
 
 func GenerateJWT(user model.User) (string, error) {
+	// Atoi is equivalent to ParseInt(s, 10, 0), converted to type int.
 	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":  user.ID,
-		"iat": time.Now().Unix(),
-		"eat": time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(),
-	})
+	// MapClaims is a claims type that uses the map[string]interface{} for JSON decoding.
+	claims := jwt.MapClaims{
+		"id":  user.ID,                                                      // the user’s id (id)
+		"iat": time.Now().Unix(),                                            // the time at which the token was issued (iat)
+		"eat": time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(), // the expiry date of the token (eat).
+	}
+	// Creates a new Token with the specified signing method and claims.
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// Creates and returns a complete, signed JWT.
 	return token.SignedString(privateKey)
 }
 
@@ -40,7 +45,6 @@ func ValidateJWT(context *gin.Context) error {
 
 	return errors.New("invalid token provided")
 }
-
 
 func CurrentUser(context *gin.Context) (model.User, error) {
 	err := ValidateJWT(context)
