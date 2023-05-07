@@ -15,7 +15,6 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS   
 ## 1.2. Run the app
 
 ```shell
-% go mod tidy
 % go get .
 % go run main.go 
 Successfully connected to the database
