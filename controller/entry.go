@@ -8,6 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ============================================================
+// AddEntry function
+// ============================================================
 func AddEntry(context *gin.Context) {
 	var input model.Entry
 	if err := context.ShouldBindJSON(&input); err != nil {
@@ -35,6 +38,9 @@ func AddEntry(context *gin.Context) {
 	context.JSON(http.StatusCreated, gin.H{"data": savedEntry})
 }
 
+// ============================================================
+// GetAllEntries function
+// ============================================================
 func GetAllEntries(context *gin.Context) {
 
 	user, err := helper.CurrentUser(context)

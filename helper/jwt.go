@@ -15,6 +15,9 @@ import (
 
 var privateKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
 
+// ============================================================
+// GenerateJWT function
+// ============================================================
 func GenerateJWT(user model.User) (string, error) {
 	// Atoi is equivalent to ParseInt(s, 10, 0), converted to type int.
 	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
@@ -30,6 +33,9 @@ func GenerateJWT(user model.User) (string, error) {
 	return token.SignedString(privateKey)
 }
 
+// ============================================================
+// ValidateJWT function
+// ============================================================
 func ValidateJWT(context *gin.Context) error {
 	token, err := getToken(context)
 
@@ -46,6 +52,9 @@ func ValidateJWT(context *gin.Context) error {
 	return errors.New("invalid token provided")
 }
 
+// ============================================================
+// CurrentUser function
+// ============================================================
 func CurrentUser(context *gin.Context) (model.User, error) {
 	err := ValidateJWT(context)
 	if err != nil {
@@ -56,6 +65,7 @@ func CurrentUser(context *gin.Context) (model.User, error) {
 	claims, _ := token.Claims.(jwt.MapClaims)
 	userId := uint(claims["id"].(float64))
 
+	// Executes User FindUserById function.
 	user, err := model.FindUserById(userId)
 	if err != nil {
 		return model.User{}, err
@@ -63,8 +73,12 @@ func CurrentUser(context *gin.Context) (model.User, error) {
 	return user, nil
 }
 
+// ============================================================
+// getToken function
+// ============================================================
 func getToken(context *gin.Context) (*jwt.Token, error) {
 	tokenString := getTokenFromRequest(context)
+	// Parses, validates, verifies the signature and returns the parsed token.
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -75,7 +89,13 @@ func getToken(context *gin.Context) (*jwt.Token, error) {
 	return token, err
 }
 
+// ============================================================
+// getTokenFromRequest function
+// ============================================================
 func getTokenFromRequest(context *gin.Context) string {
+	// Retrieves the bearer token from the request.
+	// Bearer tokens come in the format `bearer <JWT>`,
+	// So the retrieved string is split and the JWT string is returned.
 	bearerToken := context.Request.Header.Get("Authorization")
 	splitToken := strings.Split(bearerToken, " ")
 	if len(splitToken) == 2 {

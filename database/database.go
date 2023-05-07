@@ -10,6 +10,9 @@ import (
 
 var Database *gorm.DB
 
+// ============================================================
+// Connect function
+// ============================================================
 /*
 1. Retrieves the environment variables required to set up a database connection.
 2. Opens the connection using the GORM PostgreSQL driver.

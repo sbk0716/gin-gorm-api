@@ -8,6 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ============================================================
+// JWTAuthMiddleware function
+// ============================================================
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		err := helper.ValidateJWT(context)
