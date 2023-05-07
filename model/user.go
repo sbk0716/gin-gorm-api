@@ -9,11 +9,19 @@ import (
 	"gorm.io/gorm"
 )
 
+// ============================================================
+// Declare User model
+// ============================================================
 type User struct {
+	// GORM defined a gorm.Model struct, which includes fields ID, CreatedAt, UpdatedAt, DeletedAt
+	// FYI: https://gorm.io/docs/models.html#gorm-Model
 	gorm.Model
 	Username string `gorm:"size:255;not null;unique" json:"username"`
+	// Notice that the JSON binding for the Password field is -. This ensures that the user’s password is not returned in the JSON response.
 	Password string `gorm:"size:255;not null;" json:"-"`
-	Entries  []Entry
+	// User has many Entries.
+	// FYI: https://gorm.io/docs/has_many.html#Has-Many
+	Entries []Entry
 }
 
 func (user *User) Save() (*User, error) {
@@ -34,7 +42,6 @@ func (user *User) BeforeSave(*gorm.DB) error {
 	user.Username = html.EscapeString(strings.TrimSpace(user.Username))
 	return nil
 }
-
 
 func (user *User) ValidatePassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))

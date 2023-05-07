@@ -6,7 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+// ============================================================
+// Declare Entry model
+// ============================================================
 type Entry struct {
+	// GORM defined a gorm.Model struct, which includes fields ID, CreatedAt, UpdatedAt, DeletedAt
+	// FYI: https://gorm.io/docs/models.html#gorm-Model
 	gorm.Model
 	Content string `gorm:"type:text" json:"content"`
 	UserID  uint
