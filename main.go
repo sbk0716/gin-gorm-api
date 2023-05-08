@@ -47,6 +47,7 @@ func serveApplication() {
 
 	// Creates a new router group(protectedRoutes).
 	protectedRoutes := router.Group("/api")
+	// Adds middleware to the group.
 	protectedRoutes.Use(middleware.JWTAuthMiddleware())
 	protectedRoutes.POST("/entry", controller.AddEntry)
 	protectedRoutes.GET("/entry", controller.GetAllEntries)
