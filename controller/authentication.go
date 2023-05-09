@@ -18,10 +18,11 @@ Register function:
 
 3. Executes User Save function.
 
-4. If Save function is successfully executed, StatusCreated(201) is returned.
+4. If the Save function is successfully executed, StatusCreated(201) is returned.
 */
 func Register(context *gin.Context) {
 	var input model.AuthenticationInput
+	// Sets the address of a variable(input).
 	ptrInput := &input
 
 	// Executes the validation.
@@ -41,17 +42,19 @@ func Register(context *gin.Context) {
 	}
 	fmt.Printf("user: %#v\n", user)
 
+	// Sets the address of a variable(user).
 	ptrUser := &user
-	// Executes User Save function from a pointer of data.
+	// Executes User Save function.
+	// It returns the address of the pointer variable(ptrUser).
 	savedUser, err := ptrUser.Save()
+	fmt.Printf("savedUser: %#v\n", savedUser)
 
 	if err != nil {
-		// If the execution of this function(Save function) fails, StatusBadRequest(400) is returned.
+		// If the Save function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// If this function(Save function) is successfully executed, StatusCreated(201) is returned.
+	// If the Save function is successfully executed, StatusCreated(201) is returned.
 	context.JSON(http.StatusCreated, gin.H{"user": savedUser})
 }
 
@@ -69,10 +72,11 @@ Login function:
 
 4. Executes Helper GenerateJWT function.
 
-5. If GenerateJWT function is successfully executed, StatusOK(200) is returned.
+5. If the GenerateJWT function is successfully executed, StatusOK(200) is returned.
 */
 func Login(context *gin.Context) {
 	var input model.AuthenticationInput
+	// Sets the address of a variable(input).
 	ptrInput := &input
 
 	// Executes the validation.
@@ -90,7 +94,7 @@ func Login(context *gin.Context) {
 	fmt.Printf("user: %#v\n", user)
 
 	if err != nil {
-		// If the execution of this function(FindUserByUsername function) fails, StatusBadRequest(400) is returned.
+		// If the FindUserByUsername function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -99,7 +103,7 @@ func Login(context *gin.Context) {
 	err = user.ValidatePassword(input.Password)
 
 	if err != nil {
-		// If the execution of this function(ValidatePassword function) fails, StatusBadRequest(400) is returned.
+		// If the ValidatePassword function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -107,12 +111,12 @@ func Login(context *gin.Context) {
 	// Executes Helper GenerateJWT function.
 	jwt, err := helper.GenerateJWT(user)
 	if err != nil {
-		// If the execution of this function(GenerateJWT function) fails, StatusBadRequest(400) is returned.
+		// If the GenerateJWT function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	fmt.Printf("jwt: %#v\n", jwt)
 
-	// If this function(GenerateJWT function) is successfully executed, StatusOK(200) is returned.
+	// If the GenerateJWT function is successfully executed, StatusOK(200) is returned.
 	context.JSON(http.StatusOK, gin.H{"jwt": jwt})
 }

@@ -28,13 +28,14 @@ type User struct {
 /*
 Save function:
 
-1. Passes a pointer of data to Create function.
+1. Passes the address of the pointer variable(user) to the Create function.
 
-2. If Create function is successfully executed, a pointer of data and nil is returned.
+2. If the Create function is successfully executed, it returns the address of the pointer variable(user) and nil.
+
+FYI: https://gorm.io/docs/create.html
 */
 func (user *User) Save() (*User, error) {
-
-	// Passes a pointer of data to Create function.
+	// Passes the address of the pointer variable(user) to the Create function.
 	result := database.Database.Create(&user)
 	fmt.Printf("result: %#v\n", result)
 	// Returns inserted data's primary key.
@@ -48,10 +49,12 @@ func (user *User) Save() (*User, error) {
 	fmt.Printf("rowsAffected: %#v\n", rowsAffected)
 
 	if err != nil {
-		// If the execution of Create function fails, a pointer of data and error is returned.
+		// If the Create function fails to execute,
+		// it returns the address of empty struct and an error.
 		return &User{}, err
 	}
-	// If Create function is successfully executed, a pointer of data and nil is returned.
+	// If the Create function is successfully executed,
+	// it returns the address of the pointer variable(user) and nil.
 	return user, nil
 }
 
