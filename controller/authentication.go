@@ -14,7 +14,7 @@ Register function:
 
 1. Executes the validation.
 
-2. Creates user.
+2. Creates user model.
 
 3. Executes User Save function.
 
@@ -34,7 +34,7 @@ func Register(context *gin.Context) {
 	// If the validation passes, the variable is filled with the request data.
 	fmt.Printf("input: %#v\n", input)
 
-	// Creates user.
+	// Creates user model.
 	user := model.User{
 		Username: input.Username,
 		Password: input.Password,
