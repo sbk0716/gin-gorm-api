@@ -16,7 +16,7 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS   
 
 ```shell
 % go get .
-% go run main.go 
+% go run main.go
 Successfully connected to the database
 [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
@@ -55,4 +55,18 @@ Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-
   }
 }
 %
+```
+
+
+## 2.2. `POST /auth/login`
+
+```sh
+curl -s -H "Content-Type: application/json" \
+    -X POST \
+    -d '{"username":"testuser01", "password":"sfasf"}' \
+    http://localhost:8000/auth/login | jq -r '.'
+{
+  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2ODM2NDE4ODksImlhdCI6MTY4MzYzOTg4OSwiaWQiOjN9.vIA1y3pFYU4b29wwtYkVO0mcwLI-gW0sqMjcxbIEHlg"
+}
+admin@gw-mac gin-gorm-api % 
 ```
