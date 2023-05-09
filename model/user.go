@@ -2,6 +2,7 @@ package model
 
 import (
 	"diary_api/database"
+	"fmt"
 	"html"
 	"strings"
 
@@ -24,16 +25,33 @@ type User struct {
 	Entries []Entry
 }
 
-// ============================================================
-// Save function
-// ============================================================
+/*
+Save function:
+
+1. Passes a pointer of data to Create function.
+
+2. If Create function is successfully executed, a pointer of data and nil is returned.
+*/
 func (user *User) Save() (*User, error) {
-	// Inserts value, returning the inserted data's primary key in value's id.
-	// FYI: https://gorm.io/docs/create.html#Create-Record
-	err := database.Database.Create(&user).Error
+
+	// Passes a pointer of data to Create function.
+	result := database.Database.Create(&user)
+	fmt.Printf("result: %#v\n", result)
+	// Returns inserted data's primary key.
+	id := user.ID
+	fmt.Printf("id: %#v\n", id)
+	// Returns error.
+	err := result.Error
+	fmt.Printf("err: %#v\n", err)
+	// Returns inserted records count.
+	rowsAffected := result.RowsAffected
+	fmt.Printf("rowsAffected: %#v\n", rowsAffected)
+
 	if err != nil {
+		// If the execution of Create function fails, a pointer of data and error is returned.
 		return &User{}, err
 	}
+	// If Create function is successfully executed, a pointer of data and nil is returned.
 	return user, nil
 }
 

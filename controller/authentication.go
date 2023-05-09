@@ -42,7 +42,8 @@ func Register(context *gin.Context) {
 	fmt.Printf("user: %#v\n", user)
 
 	// Executes User Save function.
-	savedUser, err := user.Save()
+	ptrUser := &user
+	savedUser, err := ptrUser.Save()
 
 	if err != nil {
 		// If the execution of this function(Save function) fails, StatusBadRequest(400) is returned.
