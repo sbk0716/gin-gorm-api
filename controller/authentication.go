@@ -41,8 +41,8 @@ func Register(context *gin.Context) {
 	}
 	fmt.Printf("user: %#v\n", user)
 
-	// Executes User Save function.
 	ptrUser := &user
+	// Executes User Save function from a pointer of data.
 	savedUser, err := ptrUser.Save()
 
 	if err != nil {
