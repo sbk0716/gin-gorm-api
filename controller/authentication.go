@@ -9,14 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ============================================================
-// Register function
-// ============================================================
 /*
+Register function:
+
 1. Executes the validation.
+
 2. Creates user.
+
 3. Executes User Save function.
-4. If this function(Save function) is successfully executed, StatusCreated(201) is returned.
+
+4. If Save function is successfully executed, StatusCreated(201) is returned.
 */
 func Register(context *gin.Context) {
 	var input model.AuthenticationInput
@@ -56,11 +58,17 @@ func Register(context *gin.Context) {
 // Login function
 // ============================================================
 /*
+Login function:
+
 1. Executes the validation.
+
 2. Executes User FindUserByUsername function.
+
 3. Executes User ValidatePassword function.
+
 4. Executes Helper GenerateJWT function.
-5. If this function(GenerateJWT function) is successfully executed, StatusOK(200) is returned.
+
+5. If GenerateJWT function is successfully executed, StatusOK(200) is returned.
 */
 func Login(context *gin.Context) {
 	var input model.AuthenticationInput

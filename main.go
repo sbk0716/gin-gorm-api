@@ -12,12 +12,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// ============================================================
-// main function
-// ============================================================
 /*
+main function:
+
 1. Executes loadEnv function.
+
 2. Executes loadDatabase function.
+
 3. Executes serveApplication function.
 */
 func main() {
@@ -26,10 +27,9 @@ func main() {
 	serveApplication()
 }
 
-// ============================================================
-// loadEnv function
-// ============================================================
 /*
+loadEnv function:
+
 1. Reads env file and loads them into ENV for this process.
 */
 func loadEnv() {
@@ -40,11 +40,11 @@ func loadEnv() {
 	}
 }
 
-// ============================================================
-// loadDatabase function
-// ============================================================
 /*
+loadDatabase function:
+
 1. Opens the connection using the GORM PostgreSQL driver.
+
 2. Runs auto migration for given models.
 */
 func loadDatabase() {
@@ -57,13 +57,15 @@ func loadDatabase() {
 	database.Database.AutoMigrate(&model.Entry{})
 }
 
-// ============================================================
-// serveApplication function
-// ============================================================
 /*
+serveApplication function:
+
 1. Returns an Engine instance with the Logger and Recovery middleware already attached.
+
 2. Creates a new router group(publicRoutes).
+
 3. Creates a new router group(protectedRoutes) with additional custom middleware(JWTAuthMiddleware).
+
 4. Attaches the router to a http.Server and starts listening and serving HTTP requests.
 */
 func serveApplication() {
