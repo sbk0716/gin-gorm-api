@@ -89,9 +89,9 @@ CurrentUser function:
 
 3. Extracts userId from claims.
 
-4. Executes model.FindUserById function with userId.
+4. Executes model.FindUserByIdPreloadEntries function with userId.
 
-5. If model.FindUserById function is successfully executed, it returns the user struct and nil.
+5. If model.FindUserByIdPreloadEntries function is successfully executed, it returns the user struct and nil.
 */
 func CurrentUser(context *gin.Context) (model.User, error) {
 	// Executes ValidateJWT function.
@@ -120,14 +120,14 @@ func CurrentUser(context *gin.Context) (model.User, error) {
 	userId := uint(floadId)
 	fmt.Printf("userId: %#v\n", userId)
 
-	// Executes model.FindUserById function with userId.
-	user, err := model.FindUserById(userId)
+	// Executes model.FindUserByIdPreloadEntries function with userId.
+	user, err := model.FindUserByIdPreloadEntries(userId)
 	if err != nil {
-		// If model.FindUserById function fails to execute,
+		// If model.FindUserByIdPreloadEntries function fails to execute,
 		// it returns the empty struct and an error.
 		return model.User{}, err
 	}
-	// If model.FindUserById function is successfully executed,
+	// If model.FindUserByIdPreloadEntries function is successfully executed,
 	// it returns the user struct and nil.
 	return user, nil
 }

@@ -83,6 +83,7 @@ func serveApplication() {
 	protectedRoutes.Use(middleware.JWTAuthMiddleware())
 	protectedRoutes.POST("/entry", controller.AddEntry)
 	protectedRoutes.GET("/entry", controller.GetAllEntries)
+	protectedRoutes.GET("/entry/:id", controller.GetEntry)
 
 	// Attaches the router to a http.Server and starts listening and serving HTTP requests.
 	router.Run(":8000")

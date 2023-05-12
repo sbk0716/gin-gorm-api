@@ -5,6 +5,7 @@ import (
 	"diary_api/model"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -82,4 +83,51 @@ func GetAllEntries(context *gin.Context) {
 	}
 	// If helper.CurrentUser function is successfully executed, StatusOK(200) is returned.
 	context.JSON(http.StatusOK, gin.H{"data": user.Entries})
+}
+
+/*
+GetEntry function:
+
+1. Sets the entryId to a value extracted from the URL parameter.
+2. Executes helper.CurrentUser function.
+*/
+func GetEntry(context *gin.Context) {
+	// Sets the entryId to a value extracted from the URL parameter.
+	entryId, err := strconv.ParseUint(context.Param("id"), 10, 64)
+	if err != nil {
+		// If the URL parameter is invalid, StatusBadRequest(400) is returned.
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	fmt.Printf("entryId: %#v\n", strconv.FormatUint(entryId, 10))
+
+	// Executes helper.CurrentUser function.
+	// It returns the user struct.
+	user, err := helper.CurrentUser(context)
+
+	if err != nil {
+		// If helper.CurrentUser function fails to execute, StatusBadRequest(400) is returned.
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var result model.Entry
+	// Extracs entries with matching entryId from the entry list of the target user.
+	for _, entry := range user.Entries {
+		if entry.ID == uint(entryId) {
+			result = entry
+			break
+		}
+	}
+
+	fmt.Printf("result: %#v\n", result)
+
+	if uint(entryId) != result.ID {
+		errorMessage := fmt.Sprintf("The target entryId does not exist. [entryId: %s]", strconv.FormatUint(entryId, 10))
+		// If entryId and result.ID do not match, StatusNotFound(404) is returned.
+		context.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
+		return
+	}
+
+	// StatusOK(200) is returned.
+	context.JSON(http.StatusOK, gin.H{"entry": result})
 }
