@@ -11,7 +11,13 @@ import (
 )
 
 /*
-User struct
+User struct:
+
+1. Username
+
+2. Password
+
+3. Entries
 */
 type User struct {
 	// GORM defined a gorm.Model struct, which includes fields ID, CreatedAt, UpdatedAt, DeletedAt
