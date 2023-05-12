@@ -16,9 +16,9 @@ Register function:
 
 2. Creates user model.
 
-3. Executes User Save function.
+3. Executes (*model.User).Save function.
 
-4. If the Save function is successfully executed, StatusCreated(201) is returned.
+4. If (*model.User).Save function is successfully executed, StatusCreated(201) is returned.
 */
 func Register(context *gin.Context) {
 	var input model.AuthenticationInput
@@ -44,35 +44,32 @@ func Register(context *gin.Context) {
 
 	// Sets the address of a variable(user).
 	ptrUser := &user
-	// Executes User Save function.
+	// Executes (*model.User).Save function.
 	// It returns the address of the pointer variable(ptrUser).
 	savedUser, err := ptrUser.Save()
 	fmt.Printf("savedUser: %#v\n", savedUser)
 
 	if err != nil {
-		// If the Save function fails to execute, StatusBadRequest(400) is returned.
+		// If (*model.User).Save function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// If the Save function is successfully executed, StatusCreated(201) is returned.
+	// If (*model.User).Save function is successfully executed, StatusCreated(201) is returned.
 	context.JSON(http.StatusCreated, gin.H{"user": savedUser})
 }
 
-// ============================================================
-// Login function
-// ============================================================
 /*
 Login function:
 
 1. Executes the validation.
 
-2. Executes User FindUserByUsername function.
+2. Executes model.FindUserByUsername function.
 
-3. Executes User ValidatePassword function.
+3. Executes (*model.User).ValidatePassword function.
 
-4. Executes Helper GenerateJWT function.
+4. Executes helper.GenerateJWT function.
 
-5. If the GenerateJWT function is successfully executed, StatusOK(200) is returned.
+5. If helper.GenerateJWT function is successfully executed, StatusOK(200) is returned.
 */
 func Login(context *gin.Context) {
 	var input model.AuthenticationInput
@@ -89,34 +86,34 @@ func Login(context *gin.Context) {
 	// If the validation passes, the variable is filled with the request data.
 	fmt.Printf("input: %#v\n", input)
 
-	// Executes User FindUserByUsername function.
+	// Executes model.FindUserByUsername function.
 	user, err := model.FindUserByUsername(input.Username)
 	fmt.Printf("user: %#v\n", user)
 
 	if err != nil {
-		// If the FindUserByUsername function fails to execute, StatusBadRequest(400) is returned.
+		// If model.FindUserByUsername function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Executes User ValidatePassword function.
+	// Executes (*model.User).ValidatePassword function.
 	err = user.ValidatePassword(input.Password)
 
 	if err != nil {
-		// If the ValidatePassword function fails to execute, StatusBadRequest(400) is returned.
+		// If (*model.User).ValidatePassword function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Executes Helper GenerateJWT function.
+	// Executes helper.GenerateJWT function.
 	jwt, err := helper.GenerateJWT(user)
 	if err != nil {
-		// If the GenerateJWT function fails to execute, StatusBadRequest(400) is returned.
+		// If helper.GenerateJWT function fails to execute, StatusBadRequest(400) is returned.
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	fmt.Printf("jwt: %#v\n", jwt)
 
-	// If the GenerateJWT function is successfully executed, StatusOK(200) is returned.
+	// If helper.GenerateJWT function is successfully executed, StatusOK(200) is returned.
 	context.JSON(http.StatusOK, gin.H{"jwt": jwt})
 }
