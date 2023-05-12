@@ -8,7 +8,8 @@
 * Registration with a username and password.
 * Login with a username and password.
 * Create a new diary entry.
-* Retrieve all diary entries.
+* Retrieve all your entries.
+* Retrieve any entry of yourself.
 
 ## (2)Project Structure
 ```sh
@@ -161,7 +162,8 @@ Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-
 
 
 ## 2.4. `GET /api/entry`
-* Retrieve all diary entries.
+* Retrieve all your entries.
+* Retrieve any entry of yourself.
 
 ```sh
 % curl -s -H "Content-Type: application/json" \
@@ -210,6 +212,33 @@ Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-
       "UserID": 3
     }
   ]
+}
+% 
+```
+
+## 2.5. `GET /api/entry/:id`
+* Retrieve any entry of yourself.
+
+```sh
+% curl -s -H "Content-Type: application/json" \
+    -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2ODM5MTgwOTcsImlhdCI6MTY4MzkxNjA5NywiaWQiOjN9.lX1TJ3GQOR8l-LB7pHcCgj2-4ZJ6H-WzSc9sl8DePpo" \
+    -X GET http://localhost:8000/api/entry/1 | jq -r '.'
+{
+  "error": "The target entryId does not exist. [entryId: 1]"
+}
+%
+% curl -s -H "Content-Type: application/json" \
+    -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2ODM5MTgwOTcsImlhdCI6MTY4MzkxNjA5NywiaWQiOjN9.lX1TJ3GQOR8l-LB7pHcCgj2-4ZJ6H-WzSc9sl8DePpo" \
+    -X GET http://localhost:8000/api/entry/2 | jq -r '.'
+{
+  "entry": {
+    "ID": 2,
+    "CreatedAt": "2023-05-13T03:11:33.260782+09:00",
+    "UpdatedAt": "2023-05-13T03:11:33.260782+09:00",
+    "DeletedAt": null,
+    "content": "A sample content2",
+    "UserID": 3
+  }
 }
 % 
 ```

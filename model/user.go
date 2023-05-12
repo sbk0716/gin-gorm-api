@@ -48,6 +48,7 @@ FYI: https://go.dev/tour/methods/8
 */
 func (user *User) Save() (*User, error) {
 	// Passes the address of the pointer variable(user) to (*gorm.DB).Create function.
+	// INSERT INTO "users" ("created_at","updated_at","deleted_at","username","password") VALUES ($1$,$2$,$3$,$4$,$5$) RETURNING "id"
 	result := database.Database.Create(&user)
 	fmt.Printf("result: %#v\n", result)
 	// Returns inserted data's primary key.
@@ -140,7 +141,30 @@ FindUserByUsername function:
 func FindUserByUsername(username string) (User, error) {
 	var user User
 	// Queries the database to find the corresponding user.
+	// SELECT * FROM "users" WHERE username=$1$ AND "users"."deleted_at" IS NULL
 	err := database.Database.Where("username=?", username).Find(&user).Error
+	if err != nil {
+		// If (*gorm.DB).Find function fails to execute,
+		// it returns the empty struct and an error.
+		return User{}, err
+	}
+	// If (*gorm.DB).Find function is successfully executed,
+	// it returns the user struct and nil.
+	return user, nil
+}
+
+/*
+FindUserByIdPreloadEntries function:
+
+1. Queries the database to find the corresponding user.
+
+2. If (*gorm.DB).Find function is successfully executed, it returns the user struct and nil.
+*/
+func FindUserByIdPreloadEntries(id uint) (User, error) {
+	var user User
+	// SELECT * FROM "entries" WHERE "entries"."user_id" = $1$ AND "entries"."deleted_at" IS NULL
+	// SELECT * FROM "users" WHERE ID=$1$ AND "users"."deleted_at" IS NULL
+	err := database.Database.Preload("Entries").Where("ID=?", id).Find(&user).Error
 	if err != nil {
 		// If (*gorm.DB).Find function fails to execute,
 		// it returns the empty struct and an error.
@@ -160,7 +184,8 @@ FindUserById function:
 */
 func FindUserById(id uint) (User, error) {
 	var user User
-	err := database.Database.Preload("Entries").Where("ID=?", id).Find(&user).Error
+	// SELECT * FROM "users" WHERE ID=$1$ AND "users"."deleted_at" IS NULL
+	err := database.Database.Where("ID=?", id).Find(&user).Error
 	if err != nil {
 		// If (*gorm.DB).Find function fails to execute,
 		// it returns the empty struct and an error.

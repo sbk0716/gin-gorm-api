@@ -2,10 +2,13 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var Database *gorm.DB
@@ -30,8 +33,23 @@ func Connect() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Lagos", host, username, password, databaseName, port)
 	// Sets gorm.Dialector to pgDialector.
 	pgDialector := postgres.Open(dsn)
+
+	// Sets logger.
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second, // Slow SQL threshold
+			LogLevel:                  logger.Info, // Log level
+			IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
+			ParameterizedQueries:      true,        // Don't include params in the SQL log
+			Colorful:                  false,       // Disable color
+		},
+	)
 	// Sets options to pgOpts.
-	pgOpts := &gorm.Config{}
+	pgOpts := &gorm.Config{
+		Logger: newLogger,
+	}
+
 	// gorm.Open function opens initialize db session based on dialector.
 	Database, err = gorm.Open(pgDialector, pgOpts)
 

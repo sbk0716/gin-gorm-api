@@ -95,9 +95,10 @@ func Login(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	// Sets the address of a variable(user).
+	ptrUser := &user
 	// Executes (*model.User).ValidatePassword function.
-	err = user.ValidatePassword(input.Password)
+	err = ptrUser.ValidatePassword(input.Password)
 
 	if err != nil {
 		// If (*model.User).ValidatePassword function fails to execute, StatusBadRequest(400) is returned.
