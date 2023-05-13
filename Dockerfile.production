@@ -1,0 +1,16 @@
+FROM golang:1.19
+
+# Set destination for COPY
+WORKDIR /go/src/app
+
+COPY . .
+# Download Go modules
+RUN go mod download
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux go build -o main main.go
+
+EXPOSE 8000
+
+# Run
+CMD ["./main"]

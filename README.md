@@ -43,8 +43,9 @@
 docker-compose.yml
 % docker-compose up -d
 % docker ps
-CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS          PORTS                    NAMES
-1a4b66aaadc4   postgres:14   "docker-entrypoint.s…"   15 minutes ago   Up 15 minutes   0.0.0.0:5432->5432/tcp   diary_pg
+CONTAINER ID   IMAGE                    COMMAND                  CREATED          STATUS          PORTS                    NAMES
+9420238acadd   gin-gorm-api-diary_api   "go run main.go"         49 seconds ago   Up 48 seconds   0.0.0.0:8000->8000/tcp   diary_api
+93716eee56a1   postgres:14              "docker-entrypoint.s…"   49 seconds ago   Up 48 seconds   0.0.0.0:5432->5432/tcp   diary_pg
 % 
 % docker exec -it diary_pg /bin/bash
 root@1a4b66aaadc4:/# printenv | grep PASS
@@ -79,24 +80,50 @@ exit
 % 
 ```
 
-## 2.2. Run the app
+## 2.2. Run the app(local)
 
 ```shell
-% go get .
-% go run main.go
-Successfully connected to the database
-[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
-[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
- - using env:   export GIN_MODE=release
- - using code:  gin.SetMode(gin.ReleaseMode)
+% make up
+docker-compose up
+[+] Running 2/0
+ ⠿ Container diary_pg   Created                             0.0s
+ ⠿ Container diary_api  Created                             0.0s
+Attaching to diary_api, diary_pg
+diary_pg   | 
+diary_pg   | PostgreSQL Database directory appears to contain a database; Skipping initialization
+diary_pg   | 
+diary_pg   | 2023-05-13 03:58:12.477 UTC [1] LOG:  starting PostgreSQL 14.8 (Debian 14.8-1.pgdg110+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+diary_pg   | 2023-05-13 03:58:12.477 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+diary_pg   | 2023-05-13 03:58:12.477 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+diary_pg   | 2023-05-13 03:58:12.479 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+diary_pg   | 2023-05-13 03:58:12.483 UTC [27] LOG:  database system was shut down at 2023-05-13 03:58:11 UTC
+diary_pg   | 2023-05-13 03:58:12.487 UTC [1] LOG:  database system is ready to accept connections
+diary_api  | filePath: ".env.local"
+diary_api  | Successfully connected to the database..
+...
+...
+```
 
-[GIN-debug] POST   /auth/register            --> diary_api/controller.Register (3 handlers)
-[GIN-debug] POST   /auth/login               --> diary_api/controller.Login (3 handlers)
-[GIN-debug] POST   /api/entry                --> diary_api/controller.AddEntry (4 handlers)
-[GIN-debug] GET    /api/entry                --> diary_api/controller.GetAllEntries (4 handlers)
-[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
-Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
-[GIN-debug] Listening and serving HTTP on :8000
+## 2.3. Run the app(production)
+
+```shell
+% make up/prod
+docker-compose -f docker-compose.production.yaml up
+[+] Running 2/0
+ ⠿ Container diary_pg   Created                                                                       0.0s
+ ⠿ Container diary_api  Created                                                                       0.0s
+Attaching to diary_api, diary_pg
+diary_pg   | 
+diary_pg   | PostgreSQL Database directory appears to contain a database; Skipping initialization
+diary_pg   | 
+diary_pg   | 2023-05-13 04:08:00.220 UTC [1] LOG:  starting PostgreSQL 14.8 (Debian 14.8-1.pgdg110+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+diary_pg   | 2023-05-13 04:08:00.220 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+diary_pg   | 2023-05-13 04:08:00.220 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+diary_pg   | 2023-05-13 04:08:00.224 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+diary_pg   | 2023-05-13 04:08:00.228 UTC [27] LOG:  database system was shut down at 2023-05-13 04:07:57 UTC
+diary_pg   | 2023-05-13 04:08:00.231 UTC [1] LOG:  database system is ready to accept connections
+diary_api  | filePath: ".env.production"
+diary_api  | Successfully connected to the database
 ...
 ...
 ```
@@ -163,7 +190,6 @@ Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-
 
 ## 2.4. `GET /api/entry`
 * Retrieve all your entries.
-* Retrieve any entry of yourself.
 
 ```sh
 % curl -s -H "Content-Type: application/json" \

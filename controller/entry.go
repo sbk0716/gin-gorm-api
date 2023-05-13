@@ -89,6 +89,7 @@ func GetAllEntries(context *gin.Context) {
 GetEntry function:
 
 1. Sets the entryId to a value extracted from the URL parameter.
+
 2. Executes helper.CurrentUser function.
 */
 func GetEntry(context *gin.Context) {
