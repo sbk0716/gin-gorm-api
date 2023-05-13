@@ -14,13 +14,16 @@
 ## (2)Project Structure
 ```sh
 .
+├── Dockerfile
+├── Dockerfile.production
+├── Makefile
 ├── README.md
 ├── controller
 │   ├── authentication.go
 │   └── entry.go
 ├── database
 │   └── database.go
-├── diary_api
+├── docker-compose.production.yaml
 ├── docker-compose.yml
 ├── go.mod
 ├── go.sum
