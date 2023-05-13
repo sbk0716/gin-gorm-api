@@ -86,6 +86,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 .env.local
+.env.production
 .env
 .env.*
 
