@@ -88,6 +88,5 @@ Temporary Items
 .env.local
 .env.production
 .env
-.env.*
 
 main
