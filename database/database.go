@@ -35,6 +35,7 @@ func Connect() {
 	pgDialector := postgres.Open(dsn)
 
 	// Sets logger.
+	// FYI: https://gorm.io/docs/logger.html
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{
