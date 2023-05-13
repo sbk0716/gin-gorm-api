@@ -87,5 +87,6 @@ Temporary Items
 .apdisk
 .env.local
 .env
+.env.*
 
 main
