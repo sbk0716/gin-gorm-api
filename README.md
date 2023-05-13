@@ -23,7 +23,7 @@
 │   └── entry.go
 ├── database
 │   └── database.go
-├── docker-compose.production.yaml
+├── docker-compose.production.yml
 ├── docker-compose.yml
 ├── go.mod
 ├── go.sum
@@ -111,7 +111,7 @@ diary_api  | Successfully connected to the database..
 
 ```shell
 % make up/prod
-docker-compose -f docker-compose.production.yaml up
+docker-compose -f docker-compose.production.yml up
 [+] Running 2/0
  ⠿ Container diary_pg   Created                                                                       0.0s
  ⠿ Container diary_api  Created                                                                       0.0s
