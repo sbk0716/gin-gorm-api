@@ -7,6 +7,7 @@ import (
 	"diary_api/model"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -33,10 +34,16 @@ loadEnv function:
 1. Reads env file and loads them into ENV for this process.
 */
 func loadEnv() {
+	const targetEnvName = "GO_ENV"
+	if "" == os.Getenv(targetEnvName) {
+		_ = os.Setenv(targetEnvName, "local")
+	}
+	filePath := fmt.Sprintf(".env.%s", os.Getenv(targetEnvName))
+	fmt.Printf("filePath: %#v\n", filePath)
 	// Reads env file and loads them into ENV for this process.
-	err := godotenv.Load(".env.local")
+	err := godotenv.Load(filePath)
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Error loading env target env is %s", os.Getenv(targetEnvName))
 	}
 }
 

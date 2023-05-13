@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  diary_pg:
     image: postgres:14
     container_name: diary_pg
     restart: always
@@ -13,6 +13,16 @@ services:
       POSTGRES_USER: "super-user"
       POSTGRES_PASSWORD: "dummyPass"
       POSTGRES_DB: "diary_app"
-
+  diary_api:
+    container_name: diary_api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - diary_pg
+    environment:
+      GO_ENV: "local"
 volumes:
   db-store:
